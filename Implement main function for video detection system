@@ -1,0 +1,46 @@
+import cv2
+from detector import Detector
+from alert import AlertSystem
+from config.config import *
+
+
+def main():
+    detector = Detector(MODEL_PATH, CONFIDENCE_THRESHOLD)
+
+    alert_system = AlertSystem(
+        MAX_PEOPLE_THRESHOLD,
+        PERSON_CLASS_ID,
+        WEAPON_CLASS_ID
+    )
+
+    cap = cv2.VideoCapture(VIDEO_SOURCE)
+
+    if not cap.isOpened():
+        print("video source error")
+        return
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        detections, results = detector.detect(frame)
+
+        people, weapon = alert_system.analyze(detections)
+
+        for r in results:
+            frame = r.plot()
+
+        frame, _ = alert_system.draw(frame, people, weapon)
+
+        cv2.imshow("monitor", frame)
+
+        if cv2.waitKey(1) & 0xFF == 27:
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    main()
