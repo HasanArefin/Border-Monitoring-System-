@@ -1,0 +1,41 @@
+import cv2
+
+
+class AlertSystem:
+    def __init__(self, max_people, person_id, weapon_id):
+        self.max_people = max_people
+        self.person_id = person_id
+        self.weapon_id = weapon_id
+
+    def analyze(self, detections):
+        people = 0
+        weapon = False
+
+        for d in detections:
+            if d["class"] == self.person_id:
+                people += 1
+            if d["class"] == self.weapon_id:
+                weapon = True
+
+        return people, weapon
+
+    def draw(self, frame, people, weapon):
+        triggered = False
+
+        if people > self.max_people:
+            cv2.putText(frame, f"CROWD ALERT (> {self.max_people})",
+                        (20, 40), cv2.FONT_HERSHEY_SIMPLEX,
+                        1, (0, 0, 255), 2)
+            triggered = True
+
+        if weapon:
+            cv2.putText(frame, "WEAPON DETECTED",
+                        (20, 80), cv2.FONT_HERSHEY_SIMPLEX,
+                        1, (0, 0, 255), 2)
+            triggered = True
+
+        cv2.putText(frame, f"People: {people}",
+                    (20, 120), cv2.FONT_HERSHEY_SIMPLEX,
+                    1, (255, 255, 0), 2)
+
+        return frame, triggered
