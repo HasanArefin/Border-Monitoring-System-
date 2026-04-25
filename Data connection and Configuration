@@ -1,0 +1,26 @@
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# model path
+MODEL_PATH = os.path.join(BASE_DIR, "models", "best.pt")
+
+# dataset path 
+DATASET_PATH = os.path.join(BASE_DIR, "dataset")
+
+# structured dataset paths
+TRAIN_IMAGES = os.path.join(DATASET_PATH, "images", "train")
+VAL_IMAGES = os.path.join(DATASET_PATH, "images", "val")
+
+TRAIN_LABELS = os.path.join(DATASET_PATH, "labels", "train")
+VAL_LABELS = os.path.join(DATASET_PATH, "labels", "val")
+
+
+VIDEO_SOURCE = 0
+
+CONFIDENCE_THRESHOLD = 0.4
+
+MAX_PEOPLE_THRESHOLD = 5
+
+PERSON_CLASS_ID = 0
+WEAPON_CLASS_ID = 1
